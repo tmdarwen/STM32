@@ -1,3 +1,5 @@
+// Register addresses for the STM32F411 chip
+
 #define PWR_BASE_ADDRESS            0x40007000
 #define PWR_CR                      PWR_BASE_ADDRESS + 0x00
 
