@@ -1,7 +1,7 @@
 STM32
 =====
 
-A repo for my various smaller STM32 MCU projects.
+A repo for my various smaller [STM32 MCU](http://www.st.com/en/microcontrollers/stm32-32-bit-arm-cortex-mcus.html) projects.
 
  
 
