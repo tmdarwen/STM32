@@ -15,9 +15,9 @@
 #include "RegisterAddresses.h"
 #include "SineSignal.h"
 
-#define ACCESS_8_BITS(address)	*((volatile uint8_t*)(address))
-#define ACCESS_16_BITS(address)	*((volatile uint16_t*)(address))
-#define ACCESS(address)			*((volatile uint32_t*)(address))
+#define ACCESS_8_BITS(address)  *((volatile uint8_t*)(address))
+#define ACCESS_16_BITS(address) *((volatile uint16_t*)(address))
+#define ACCESS(address)         *((volatile uint32_t*)(address))
 
 #define PLL_N		400
 #define PLL_P		4
@@ -268,7 +268,7 @@ void InitializeCommunicationToDAC()
 	// Configure I2C1
 
 	// Enable I2C1 (pg 494)
-    ACCESS_16_BITS(I2C1_CR1) |= 0x01;
+	ACCESS_16_BITS(I2C1_CR1) |= 0x01;
 
 	// Set the I2C1 clock frequency to 58 MHz (pg 495)
 	ACCESS_16_BITS(I2C1_CR2) &= ~(0x3F);  // Clear bits 0-to-5  0x3F = 11.1111
