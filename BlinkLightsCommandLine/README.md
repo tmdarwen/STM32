@@ -26,7 +26,7 @@ I currently (Fall 2017) use Windows as my main development machine, however, I'm
 1.   Open a GCC Command Prompt.  Note that a "GCC Command Prompt" option was installed when installing the GNU Arm Embedded Toolchain and should be available from Windows Start Menu.
 1.   Change to the BlinkLightCommandLine directory and run "make".  This will compile the C program (main.c) and the startup assembly file (startup_stm32.s) and use the LinkerScript.ld file to create the ELF file which is then converted to main.bin - the actual binary that will run on the STM32F411.
 1.   Open the STM32 ST-Link Utility and select "Program" from the "Target" pulldown menu.
-1.   Navigate to the BlockLightCommandLine directory and select main.bin.
+1.   Navigate to the BlinkLightCommandLine directory and select main.bin.
 1.   Click "Start" to flash main.bin to the development board.  After this is done you should see all four LEDs on the development board blinking (i.e. the program is running on the board).
 
 
@@ -36,7 +36,7 @@ I currently (Fall 2017) use Windows as my main development machine, however, I'm
 
 1.   Make sure to close the STM32 ST-Link Utility so OpenOCD will be able to connect to the dev board.
 1.   Open another command prompt.
-1.   Change directory to the BlockLightCommandLine directory.
+1.   Change directory to the BlinkLightCommandLine directory.
 1.   Run OpenOCD.bat.  Note that if you did NOT uncompress OpenOCD to c:\OpenOCD you'll have to modify the first line of OpenOCD.bat to point to the directory that OpenOCD exists in.
 1.   Switch to the original GCC command prompt you opened when compiling and run arm-none-eabi-gdb.
 1.   After GDB starts up, at the prompt, type "target remote localhost:3333" and press enter.  This will connect to OpenOCD.
