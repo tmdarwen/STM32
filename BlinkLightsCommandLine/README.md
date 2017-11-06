@@ -11,7 +11,7 @@ I currently (Fall 2017) use Windows as my main development machine, however, I'm
 
  
 
-**Prequisites**
+**Perquisites**
 
 1.   An [STMF32F411](http://www.st.com/en/microcontrollers/stm32f411.html?querycriteria=productId=LN1877) development board.  Currently they can be ordered from the usual sites for around $15 USD plus shipping.
 1.   Download and install the [GNU Arm Embedded Toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
@@ -41,7 +41,7 @@ I currently (Fall 2017) use Windows as my main development machine, however, I'm
 1.   Switch to the original GCC command prompt you opened when compiling and run arm-none-eabi-gdb.
 1.   After GDB starts up, at the prompt, type "target remote localhost:3333" and press enter.  This will connect to OpenOCD.
 1.   Next, type "monitor reset halt" at the GDB prompt to stop the currently running program.
-1.   Then, load the ELF file into GDB by entering "file main.ELF"
+1.   Then, load the ELF file into GDB by entering "file main.ELF".  It'll ask you "Are you sure you want to change the file?", answer "y" for "yes".
 1.   Set a breakpoint at main by typing "b main"
 1.   Restart the program by typing "c" (this is short for "continue").  This will cause the program to run until the first line of main.
 1.   Set a breakpoint on the line that toggles the LEDs.  Currently this is line 25 of main.c.  We can set a breakpoint by typing "b 25".
