@@ -11,7 +11,7 @@ I currently (Fall 2017) use Windows as my main development machine, however, I'm
 
  
 
-**Perquisites**
+**Prerequisites**
 
 1.   An [STMF32F411](http://www.st.com/en/microcontrollers/stm32f411.html?querycriteria=productId=LN1877) development board.  Currently they can be ordered from the usual sites for around $15 USD plus shipping.
 1.   Download and install the [GNU Arm Embedded Toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
