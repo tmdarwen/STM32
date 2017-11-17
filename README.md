@@ -14,5 +14,6 @@ A repo for my various smaller [STM32 MCU](http://www.st.com/en/microcontrollers/
 -   **TimerInterruptCommandLine**: Written for the [STM32F411 development board](http://www.st.com/en/microcontrollers/stm32f411.html?querycriteria=productId=LN1877), this is a simple example showing/explaining how to configure a timer interrupt.
 -   **UARTBlockingBidirectional**: Written for the [STM32F411 development board](http://www.st.com/en/microcontrollers/stm32f411.html?querycriteria=productId=LN1877), this is a simple example showing how to do bidirectional communication using UART.
 -   **UARTBlockingTransfer**: Written for the [STM32F411 development board](http://www.st.com/en/microcontrollers/stm32f411.html?querycriteria=productId=LN1877), this is a simple example showing how to transfer data using UART.
+-   **UARTDMATransfer**: Written for the [STM32F411 development board](http://www.st.com/en/microcontrollers/stm32f411.html?querycriteria=productId=LN1877), this is code showing how to transfer data using UART and DMA.
 -   **UARTReceiveInterrupt**: Written for the [STM32F411 development board](http://www.st.com/en/microcontrollers/stm32f411.html?querycriteria=productId=LN1877), this is an example showing how to receive data using an interrupt with UART to avoid blocking calls.
 
