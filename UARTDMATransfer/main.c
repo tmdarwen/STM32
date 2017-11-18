@@ -148,16 +148,16 @@ void SendString(char* string)
 	ACCESS(DMA1_S6M0AR) = (unsigned int)dmaBuffer;
 
 	// Enable interrupt to occur upon completion of transfer
-    ACCESS(DMA1_S6CR) |= (1 << 4);
+	ACCESS(DMA1_S6CR) |= (1 << 4);
 
-    // Enable the stream
-    ACCESS(DMA1_S6CR) |= 1;
+	// Enable the stream
+	ACCESS(DMA1_S6CR) |= 1;
 
-    // Clear the transfer complete flag in the UART SR
-    ACCESS(USART2_SR) &= ~(1 << 6);
+	// Clear the transfer complete flag in the UART SR
+	ACCESS(USART2_SR) &= ~(1 << 6);
 
-    // Enable DMA transmission
-    ACCESS(USART2_CR3) |= (1 << 7);
+	// Enable DMA transmission
+	ACCESS(USART2_CR3) |= (1 << 7);
 }
 
 int main(void)
