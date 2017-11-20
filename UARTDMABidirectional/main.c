@@ -48,8 +48,8 @@ void DMA1_Stream5_IRQHandler(void)
 		// Clear the transfer complete interrupt (pg 188)
 		ACCESS(DMA1_HIFCR) |= (1 << 11);
 
-	    // Enable the DMA transfer stream. (pg 192)
-	    ACCESS(DMA1_S6CR) |= 1;
+		// Enable the DMA transfer stream. (pg 192)
+		ACCESS(DMA1_S6CR) |= 1;
 	}
 }
 
@@ -63,8 +63,8 @@ void DMA1_Stream6_IRQHandler(void)
 		// Clear the transfer complete interrupt (pg 188)
 		ACCESS(DMA1_HIFCR) |= (1 << 21);
 
-	    // Enable the DMA reception stream (pg 192)
-	    ACCESS(DMA1_S5CR) |= 1;
+		// Enable the DMA reception stream (pg 192)
+		ACCESS(DMA1_S5CR) |= 1;
 	}
 }
 
@@ -128,7 +128,7 @@ void UartDmaInit()
 	ACCESS(DMA1_S5CR) |= (1 << 4);
 	ACCESS(DMA1_S6CR) |= (1 << 4);
 
-    // Enable the DMA reception stream (pg 192)
+	// Enable the DMA reception stream (pg 192)
 	ACCESS(DMA1_S5CR) |= 1;
 }
 
@@ -151,8 +151,8 @@ void UartInit()
 	// Bit 13 = Enable the UART
 	ACCESS(USART2_CR1) |= ((1 << 2) | (1 << 3) | (1 << 13));
 
-    // Enable UART2 DMA for receiving/transferring data
-    ACCESS(USART2_CR3) |= ((1 << 6) | (1 << 7));
+	// Enable UART2 DMA for receiving/transferring data
+	ACCESS(USART2_CR3) |= ((1 << 6) | (1 << 7));
 }
 
 int main(void)
