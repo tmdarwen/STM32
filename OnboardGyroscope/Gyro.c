@@ -39,12 +39,12 @@ unsigned char ReadFromGyro(unsigned char gyroRegister)
 	ACCESS(GPIOE_BSRR) |= (1 << 19);
 	WaitForSPI1TXReady();
 	ACCESS(SPI1_DR) = (gyroRegister | 0x80); // 0x80 indicates we're doing a read
-    WaitForSPI1RXReady();
-    ACCESS(SPI1_DR);  // I believe we need this simply because a read must follow a write
-    WaitForSPI1TXReady();
-    ACCESS(SPI1_DR) = 0xFF;
-    WaitForSPI1RXReady();
-    volatile unsigned char readValue = (unsigned char)ACCESS(SPI1_DR);
+	WaitForSPI1RXReady();
+	ACCESS(SPI1_DR);  // I believe we need this simply because a read must follow a write
+	WaitForSPI1TXReady();
+	ACCESS(SPI1_DR) = 0xFF;
+	WaitForSPI1RXReady();
+	volatile unsigned char readValue = (unsigned char)ACCESS(SPI1_DR);
 	ACCESS(GPIOE_BSRR) |= (1 << 3);
 
 	return readValue;
@@ -55,12 +55,12 @@ void WriteToGyro(unsigned char gyroRegister, unsigned char value)
 	ACCESS(GPIOE_BSRR) |= (1 << 19);
 	WaitForSPI1TXReady();
 	ACCESS(SPI1_DR) = gyroRegister;
-    WaitForSPI1RXReady();
-    ACCESS(SPI1_DR);  // I believe we need this simply because a read must follow a write
-    WaitForSPI1TXReady();
-    ACCESS(SPI1_DR) = value;
-    WaitForSPI1RXReady();
-    ACCESS(SPI1_DR);  // Don't care what valley the device put into the data register
+	WaitForSPI1RXReady();
+	ACCESS(SPI1_DR);  // I believe we need this simply because a read must follow a write
+	WaitForSPI1TXReady();
+	ACCESS(SPI1_DR) = value;
+	WaitForSPI1RXReady();
+	ACCESS(SPI1_DR);  // Don't care what valley the device put into the data register
 	ACCESS(GPIOE_BSRR) |= (1 << 3);
 }
 
@@ -130,7 +130,7 @@ short GetAxisValue(unsigned char lowRegister, unsigned char highRegister)
 	// See page 9 of L3GD20.  It shows the mechanical characteristics of the gyro.  Note
 	// that we leave the sensitivity as is (i.e. 0) so that it's 250 dps.  So, we read
 	// the value from the gyro and convert it to a +/- 360 degree value.
-    float scaler = 8.75 * 0.001;
+	float scaler = 8.75 * 0.001;
 	short temp = (ReadFromGyro(lowRegister) | (ReadFromGyro(highRegister) << 8));
 	return (short)((float)temp * scaler);
 }
@@ -165,12 +165,12 @@ void DisplayAxisValues()
 {
 	// See page 36 of the L3GD20 datasheet.  It shows the hi/lo addresses of each of
 	// the axes.
-    DisplayAxisValue("X", GetAxisValue(0x28, 0x29));
-    SendString("  ");
-    DisplayAxisValue("Y", GetAxisValue(0x2A, 0x2B));
-    SendString("  ");
-    DisplayAxisValue("Z", GetAxisValue(0x2C, 0x2D));
+	DisplayAxisValue("X", GetAxisValue(0x28, 0x29));
+	SendString("  ");
+	DisplayAxisValue("Y", GetAxisValue(0x2A, 0x2B));
+	SendString("  ");
+	DisplayAxisValue("Z", GetAxisValue(0x2C, 0x2D));
 
-    // Reset the terminal cursor to the beginning of the line
+	// Reset the terminal cursor to the beginning of the line
 	SendString("\r");
 }
