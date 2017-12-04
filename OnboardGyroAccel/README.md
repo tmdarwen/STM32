@@ -14,4 +14,4 @@ The [STM32F411 development board](http://www.st.com/en/microcontrollers/stm32f41
 
 **Video Demo**
 
-[![STM32 Gyroscope and Accelerometer Demonstration](https://img.youtube.com/vi/Xabx-2WM5HU/0.jpg)](https://www.youtube.com/watch?v=Xabx-2WM5HU)
+[![STM32 Gyroscope and Accelerometer Demonstration](https://img.youtube.com/vi/488qheY73ic/0.jpg)](https://www.youtube.com/watch?v=488qheY73ic)
