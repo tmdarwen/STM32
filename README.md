@@ -20,6 +20,7 @@ Each example simply contains the source code, startup code and a makefile for th
 -   **UARTDMABidirectional**: This example shows how to do bidirectional UART communication using DMA for both transferring and receiving data.  This project uses a terminal program to receive a keypress character and then display the character on the terminal screen.
 -   **UARTDMATransfer**: Shows how to transfer data using UART and DMA.
 -   **UARTReceiveInterrupt**: Shows how to receive data using an interrupt with UART to avoid blocking calls.
+-   **UserButton**: Simple example showing how to use the user button on the STM32F411 development board.
 
  
 
