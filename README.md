@@ -21,6 +21,7 @@ Each example simply contains the source code, startup code and a makefile for th
 -   **UARTDMATransfer**: Shows how to transfer data using UART and DMA.
 -   **UARTReceiveInterrupt**: Shows how to receive data using an interrupt with UART to avoid blocking calls.
 -   **UserButton**: Simple example showing how to use the user button on the STM32F411 development board.
+-   **UserButtonInterrupt**: Uses an interrupt to detect when the user button on the STM32F411 development board is pressed/released.
 
  
 
