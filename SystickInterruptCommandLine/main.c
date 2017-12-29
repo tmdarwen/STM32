@@ -64,7 +64,7 @@ int main(void)
 	ACCESS(SYSTICK_VAL) &= ~(0xFFFFFF);
 
 	// Set the systick clock source to the processsor clock, enable the interrupt 
-	// request and activate the the systick timer.
+	// request and activate the systick timer.
 	ACCESS(SYSTICK_CTRL) |= ((1 << 2) | (1 << 1) | 1);
 
 	while(1);
