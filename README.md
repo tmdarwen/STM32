@@ -6,7 +6,6 @@ This is a repo for my various smaller [STM32 MCU](http://www.st.com/en/microcont
 Each example simply contains the source code, startup code and a makefile for the project.  No projects have external software dependencies.  Following some [simple steps](STM32F411/BlinkLightsCommandLine/README.md), you should be able to easily build these examples from the command line using the GNU ARM Embedded Toolchain.  Or, if you prefer, you should be able to easily load the source code into your favorite IDE/toolchain to build/run the examples from it.
 
 **STM32F411 Index**
-
 -   [**BlinkLightsCommandLine**](STM32F411/BlinkLightsCommandLine/README.md): This example simply blinks the onboard LEDs.  Although a simple program, its importance is that it shows how to compile and debug entirely on the command line using GCC and GDB.  
 -   **HighSpeedClock**: This example shows how to configure the CPU clock speed to the maximum rate (100 MHz).
 -   **OnboardAccelerometer**: The STM32F411 development board has an [LSM303DLHC accelerometer](http://www.st.com/en/mems-and-sensors/lsm303dlhc.html) included on the board.  This example initializes the accelerometer and continually reads x, y, z axes from it displaying the values in realtime to a terminal program using UART.
@@ -22,6 +21,10 @@ Each example simply contains the source code, startup code and a makefile for th
 -   **UARTReceiveInterrupt**: Shows how to receive data using an interrupt with UART to avoid blocking calls.
 -   **UserButton**: Simple example showing how to use the user button on the STM32F411 development board.
 -   **UserButtonInterrupt**: Uses an interrupt to detect when the user button on the STM32F411 development board is pressed/released.
+
+**STM32F429 Index**
+-   [**BlinkLightsHALAndFreeRTOS**](STM32F429/BlinkLightsHALAndFreeRTOS/README.md): Although a fairly simple program - it just blinks LEDs on the board periodically - its importance is that it shows how to use FreeRTOS with multiple threads in an STM32 project.
+
 
  
 
