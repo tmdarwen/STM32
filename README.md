@@ -1,9 +1,9 @@
 STM32
 =====
 
-This is a repo for my various smaller [STM32 MCU](http://www.st.com/en/microcontrollers/stm32-32-bit-arm-cortex-mcus.html) projects.  So far these only pertain to the [STM32F411 development board](http://www.st.com/en/microcontrollers/stm32f411.html?querycriteria=productId=LN1877).  For many of these projects I *_do not_* use the STM HAL or Standard Peripheral Library.  I do this for the sake of understanding and demonstrating how the STM32F4 and peripherals work at their lowest levels.  All of these examples are well commented, explaining what each non-obvious line of code is doing, frequently referencing datasheet pages for detailed information and explanation.  When I do use the HAL or other external libraries or systems it's noted in the index below.
+This is a repo for my various smaller [STM32 MCU](http://www.st.com/en/microcontrollers/stm32-32-bit-arm-cortex-mcus.html) projects.  Below you'll see a number of examples for the [STM32F411 development board](http://www.st.com/en/microcontrollers/stm32f411.html?querycriteria=productId=LN1877) and the [STM32F429 dev board](http://www.st.com/en/evaluation-tools/32f429idiscovery.html).  For many of these projects I *_do not_* use the STM HAL or Standard Peripheral Library.  I do this for the sake of understanding and demonstrating how the STM32F4 and peripherals work at their lowest levels.  All of these examples are well commented, explaining what each non-obvious line of code is doing, frequently referencing datasheet pages for detailed information and explanation.  When I do use the HAL or other external libraries or systems it's noted in the index below.
 
-Each example simply contains the source code, startup code and a makefile for the project.  No projects have external software dependencies.  Following some [simple steps](STM32F411/BlinkLightsCommandLine/README.md), you should be able to easily build these examples from the command line using the GNU ARM Embedded Toolchain.  Or, if you prefer, you should be able to easily load the source code into your favorite IDE/toolchain to build/run the examples from it.
+Each example simply contains the source code, startup code and a makefile for the project.  Few of the projects have external software dependencies.  Those that due will be noted in the description.  Following [simple steps](STM32F411/BlinkLightsCommandLine/README.md), you should be able to easily build these examples from the command line using the GNU ARM Embedded Toolchain.  Or, if you prefer, you should be able to easily load the source code into your favorite IDE/toolchain to build/run the examples from it.
 
 **STM32F411 Index**
 -   [**BlinkLightsCommandLine**](STM32F411/BlinkLightsCommandLine/README.md): This example simply blinks the onboard LEDs.  Although a simple program, its importance is that it shows how to compile and debug entirely on the command line using GCC and GDB.  
@@ -23,7 +23,7 @@ Each example simply contains the source code, startup code and a makefile for th
 -   **UserButtonInterrupt**: Uses an interrupt to detect when the user button on the STM32F411 development board is pressed/released.
 
 **STM32F429 Index**
--   [**BlinkLightsHALAndFreeRTOS**](STM32F429/BlinkLightsHALAndFreeRTOS/README.md): Although a fairly simple program - it just blinks LEDs on the board periodically - its importance is that it shows how to use FreeRTOS with multiple threads in an STM32 project.
+-   [**BlinkLightsHALAndFreeRTOS**](STM32F429/BlinkLightsHALAndFreeRTOS/README.md): Although a fairly simple program - it just blinks LEDs on the board periodically - its importance is that it shows how to use FreeRTOS with multiple threads in an STM32 project.  This example has a dependency on the [STM32 Cube Firmware](http://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef4.html).
 
 
  
