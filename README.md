@@ -24,6 +24,7 @@ Each example simply contains the source code, startup code and a makefile for th
 
 **STM32F429 Index**
 -   [**BlinkLightsCube32FreeRTOS**](STM32F429/BlinkLightsCube32FreeRTOS/README.md): Shows how to use [FreeRTOS](https://www.freertos.org/), as packaged in the STM32 Cube Firmware.  This example has a dependency on the [STM32 Cube Firmware](http://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef4.html).
+-   [**BlinkLightsFreeRTOS**](STM32F429/BlinkLightsFreeRTOS/README.md): Shows how to use [FreeRTOS](https://www.freertos.org/) without a dependency on the STM32 Cube Firmware.  This example has a dependency on the FreeRTOS package that can be currently downloaded from [here](https://www.freertos.org/).
 -   [**BlinkLightsHALAndFreeRTOS**](STM32F429/BlinkLightsHALAndFreeRTOS/README.md): Shows how to use the [STM32 HAL](http://www.st.com/en/embedded-software/stm32cubef4.html) and [FreeRTOS](https://www.freertos.org/). This example has a dependency on the [STM32 Cube Firmware](http://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef4.html).
 
 
