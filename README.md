@@ -23,7 +23,8 @@ Each example simply contains the source code, startup code and a makefile for th
 -   **UserButtonInterrupt**: Uses an interrupt to detect when the user button on the STM32F411 development board is pressed/released.
 
 **STM32F429 Index**
--   [**BlinkLightsHALAndFreeRTOS**](STM32F429/BlinkLightsHALAndFreeRTOS/README.md): Although a fairly simple program - it just blinks LEDs on the board periodically - its importance is that it shows how to use [FreeRTOS](https://www.freertos.org/) with multiple threads in an STM32 project.  This example has a dependency on the [STM32 Cube Firmware](http://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef4.html).
+-   [**BlinkLightsCube32FreeRTOS**](STM32F429/BlinkLightsCube32FreeRTOS/README.md): Shows how to use [FreeRTOS](https://www.freertos.org/), as packaged in the STM32 Cube Firmware.  This example has a dependency on the [STM32 Cube Firmware](http://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef4.html).
+-   [**BlinkLightsHALAndFreeRTOS**](STM32F429/BlinkLightsHALAndFreeRTOS/README.md): Shows how to use the [STM32 HAL](http://www.st.com/en/embedded-software/stm32cubef4.html) and [FreeRTOS](https://www.freertos.org/). This example has a dependency on the [STM32 Cube Firmware](http://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef4.html).
 
 
  
