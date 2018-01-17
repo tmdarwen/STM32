@@ -1,7 +1,7 @@
 STM32F429 Bouncing Ball
 =======================
 
-This example was written for the [STM32F429 development board](http://www.st.com/en/microcontrollers/stm32f429-439.html?querycriteria=productId=LN1806).  I manipulated the STM32F429 "hello world" example contained in the [STM32 Cube Firmware v1.18.0](http://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef4.html) to make a ball (circle) infinitely bouncing around the LCD screen that comes on the STM32F429 development board.
+This example was written for the [STM32F429 development board](http://www.st.com/en/microcontrollers/stm32f429-439.html?querycriteria=productId=LN1806).  I manipulated the STM32F429 "hello world" example contained in the [STM32 Cube Firmware v1.18.0](http://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef4.html) to make a ball (circle) infinitely bounce around the LCD screen of the STM32F429 development board.
 
 I've added a makefile so that it can easily be built without an IDE (see directions below).  The software has a dependency on the [STM32 Cube Firmware v1.18.0](http://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef4.html).
 
