@@ -86,7 +86,6 @@ __IO uint8_t line_idx = 0;
 static void LCD_Config(void);
 static void MSC_Application(void);
 static void USBH_UserProcess(USBH_HandleTypeDef *phost, uint8_t id);
-static uint8_t Explore_Disk(char *path , uint8_t recu_level);
 static uint8_t Image_Browser(char *path);
 static void Show_Image(void);
 static uint32_t Storage_OpenReadFile(uint32_t Address);
@@ -120,7 +119,7 @@ int main(void)
   
   /* Configure USER Button */
   BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
-  
+
   /* Initialize LCD driver */
   LCD_Config();
   
@@ -224,28 +223,7 @@ static void MSC_Application(void)
     else
     {
       LCD_UsrLog("> File System initialized.\n");
-      USBH_USR_ApplicationState = USH_USR_FS_READLIST;
-    }
-    break;
-    
-  case USH_USR_FS_READLIST:
-    LCD_UsrLog("> Exploring disk flash ...\n");
-    if (Explore_Disk("0:/", 1) != FR_OK)
-    {
-      LCD_ErrLog("> File cannot be explored.\n");
-      Error_Handler();
-    }
-    else 
-    {
-      line_idx = 0;   
-      USBH_USR_ApplicationState = USH_USR_FS_DRAW; 
-      
-      LCD_UsrLog("To start Image Slideshow\n");
-      LCD_UsrLog("Press Key\n");
-      while(BSP_PB_GetState (BUTTON_KEY) != SET)
-      {
-        Toggle_Leds();
-      }
+      USBH_USR_ApplicationState = USH_USR_FS_DRAW;
     }
     break;
     
@@ -269,91 +247,6 @@ static void MSC_Application(void)
   return;
 }
 
-/**
-  * @brief  Displays disk content
-  * @param  path: pointer to root path
-  * @param  recu_level: explorer level
-  * @retval None
-  */
-static uint8_t Explore_Disk(char* path , uint8_t recu_level)
-{
-  FRESULT res;
-  FILINFO fno;
-  DIR dir;
-  char *fn;
-  char tmp[14];
-  
-  res = f_opendir(&dir, path);
-  
-  if (res == FR_OK) 
-  {
-    /* USER Button in polling */
-    LCD_UsrLog("To see the disk root content:\n" );
-    LCD_UsrLog("Press Key...\n");
-    while((BSP_PB_GetState (BUTTON_KEY) != SET))          
-    {
-      Toggle_Leds();
-    }
-    while((BSP_PB_GetState (BUTTON_KEY) != RESET))          
-    {
-      Toggle_Leds();
-    }
-    while(Appli_state == APPLICATION_START) 
-    {
-      res = f_readdir(&dir, &fno);
-      if (res != FR_OK || fno.fname[0] == 0) 
-      {
-        break;
-      }
-      if (fno.fname[0] == '.')
-      {
-        continue;
-      }
-      
-      fn = fno.fname;
-      strcpy(tmp, fn); 
-      
-      line_idx++;
-      if(line_idx > 12)
-      {
-        line_idx = 0;
-        LCD_UsrLog("Press Key to continue...\n");
-        
-        /* USER Button in polling */
-        while((Appli_state == APPLICATION_START) && \
-          (BSP_PB_GetState (BUTTON_KEY) != SET))
-        {
-          Toggle_Leds();
-        }
-      } 
-      if(recu_level == 1)
-      {
-        LCD_DbgLog("   |__");
-      }
-      else if(recu_level == 2)
-      {
-        LCD_DbgLog("   |   |__");
-      }
-      if((fno.fattrib & AM_DIR) == AM_DIR)
-      {
-        strcat(tmp, "\n"); 
-        LCD_UsrLog((void *)tmp);
-      }
-      else
-      {
-        strcat(tmp, "\n"); 
-        LCD_DbgLog((void *)tmp);
-      }
-      
-      if(((fno.fattrib & AM_DIR) == AM_DIR)&&(recu_level == 1))
-      {
-        Explore_Disk(fn, 2);
-      }
-    }
-  }
-  f_closedir(&dir);
-  return res;
-}
 
 /**
   * @brief  Image browser
@@ -394,8 +287,7 @@ static uint8_t Image_Browser(char *path)
           Show_Image();
           USBH_Delay(100);
           ret = 0;
-          while((Appli_state == APPLICATION_START) && \
-            (BSP_PB_GetState (BUTTON_KEY) != SET))
+          while((Appli_state == APPLICATION_START) && (BSP_PB_GetState (BUTTON_KEY) != SET))
           {
             Toggle_Leds();
           }
@@ -406,12 +298,7 @@ static uint8_t Image_Browser(char *path)
     }  
   }
   
-    /* LCD Log initialization */
-  LCD_LOG_Init(); 
-
-  LCD_LOG_SetHeader((uint8_t *)"LTDC Application"); 
-  LCD_LOG_SetFooter ((uint8_t *)"     USB Host Library V3.2.0" );
-  USBH_USR_ApplicationState = USH_USR_FS_READLIST;
+  USBH_USR_ApplicationState = USH_USR_FS_DRAW;
   
   f_closedir(&dir);
   return ret;
