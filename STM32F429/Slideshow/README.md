@@ -1,7 +1,7 @@
 STM32F429 Slideshow
 ===================
 
-The example was written for the [STM32F429 development board](http://www.st.com/en/microcontrollers/stm32f429-439.html?querycriteria=productId=LN1806).  The original code for this project came from the [STM32CubeF4 Firmware](http://www.st.com/en/embedded-software/stm32cubef4.html) v1.18.0 example named "LTDC_AnimatedPictureFromUSB" that can be found in the Projects\STM32F429I-Discovery\Applications\Display directory.  The project will find BMP files saved on the USB drive and display the images on the LCD screen of the STM32F429.
+This example was written for the [STM32F429 development board](http://www.st.com/en/microcontrollers/stm32f429-439.html?querycriteria=productId=LN1806).  The original code for this project came from the [STM32CubeF4 Firmware](http://www.st.com/en/embedded-software/stm32cubef4.html) v1.18.0 example named "LTDC_AnimatedPictureFromUSB" that can be found in the Projects\STM32F429I-Discovery\Applications\Display directory.  The project will find BMP files saved on the USB drive and display the images on the LCD screen of the STM32F429.
 
 I've streamlined the code for this project and added a makefile so that it can easily be built without an IDE (see directions below).  The software has a dependency on the [STM32 Cube Firmware v1.18.0](http://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32cube-mcu-packages/stm32cubef4.html).
 
