@@ -37,7 +37,7 @@ I currently (Fall 2017) use Windows as my main development machine, however, I'm
 1.   Make sure to close the STM32 ST-Link Utility so OpenOCD will be able to connect to the dev board.
 1.   Open another command prompt.
 1.   Change directory to the BlinkLightCommandLine directory.
-1.   Run OpenOCD.bat.  Note that if you did NOT uncompress OpenOCD to c:\OpenOCD you'll have to modify the first line of OpenOCD.bat to point to the directory that OpenOCD exists in.
+1.   Run StartOpenOCD.bat (_Note that if you did NOT uncompress OpenOCD to c:\OpenOCD you'll have to modify the first line of OpenOCD.bat to point to the directory that OpenOCD exists in_).
 1.   Switch to the original GCC command prompt you opened when compiling and run arm-none-eabi-gdb.
 1.   After GDB starts up, at the prompt, type "target remote localhost:3333" and press enter.  This will connect to OpenOCD.
 1.   Next, type "monitor reset halt" at the GDB prompt to stop the currently running program.
