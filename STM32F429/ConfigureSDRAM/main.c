@@ -97,7 +97,7 @@ unsigned int readBuffer[BUFFER_SIZE];
 unsigned int uwIndex = 0;
 volatile unsigned int uwWriteReadStatus = 0;
 
-
+// We configure the clock speed to 180 MHz
 void ConfigureClockSpeed()
 {
 	ACCESS(RCC_APB1ENR) |= (1 << 28);  // Enable power to the clock
@@ -149,6 +149,31 @@ void InitLEDs()
 
 void InitSDRAM()
 {
+	// See Table 6 on pg 21 of ST's UM1670 document.  It shows all of the pins on ports
+	// B-thru-G that are used to communicate with the SDRAM peripheral.  Example code 
+	// from STM also includes this nice table below:
+	// +-------------------+--------------------+--------------------+--------------------+
+	// +                       SDRAM pins assignment                                      +
+	// +-------------------+--------------------+--------------------+--------------------+
+	// | PD0  <-> FMC_D2   | PE0  <-> FMC_NBL0  | PF0  <-> FMC_A0    | PG0  <-> FMC_A10   |
+	// | PD1  <-> FMC_D3   | PE1  <-> FMC_NBL1  | PF1  <-> FMC_A1    | PG1  <-> FMC_A11   |
+	// | PD8  <-> FMC_D13  | PE7  <-> FMC_D4    | PF2  <-> FMC_A2    | PG4  <-> FMC_BA0   |
+	// | PD9  <-> FMC_D14  | PE8  <-> FMC_D5    | PF3  <-> FMC_A3    | PG5  <-> FMC_BA1   |
+	// | PD10 <-> FMC_D15  | PE9  <-> FMC_D6    | PF4  <-> FMC_A4    | PG8  <-> FMC_SDCLK |
+	// | PD14 <-> FMC_D0   | PE10 <-> FMC_D7    | PF5  <-> FMC_A5    | PG15 <-> FMC_NCAS  |
+	// | PD15 <-> FMC_D1   | PE11 <-> FMC_D8    | PF11 <-> FMC_NRAS  |--------------------+
+	// +-------------------| PE12 <-> FMC_D9    | PF12 <-> FMC_A6    |
+	//                     | PE13 <-> FMC_D10   | PF13 <-> FMC_A7    |
+	//                     | PE14 <-> FMC_D11   | PF14 <-> FMC_A8    |
+	//                     | PE15 <-> FMC_D12   | PF15 <-> FMC_A9    |
+	// +-------------------+--------------------+--------------------+
+	// | PB5 <-> FMC_SDCKE1|
+	// | PB6 <-> FMC_SDNE1 |
+	// | PC0 <-> FMC_SDNWE |
+	// +-------------------+
+
+	// See pg 1661 (section 37.7.3) of ST's RM0090 document.  It shows the steps for SDRAM initialization.
+
 	// Give a clock to ports B-thru-G
 	ACCESS(RCC_AHB1ENR) |= ((1 << 1) | (1 << 2) | (1 << 3) | (1 << 4) | (1 << 5) | (1 << 6));
 
@@ -185,56 +210,134 @@ void InitSDRAM()
 	ACCESS(GPIOG_AFRL) |= (0xC | (0xC << 4) | (0xC << 16) | (0xC << 20));
 	ACCESS(GPIOG_AFRH) |= (0xC | (0xC << 28));
 
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Step 1. "Program the memory device features into the FMC_SDCRx register. The SDRAM clock frequency, RBURST and RPIPE must
+	// be programmed in the FMC_SDCR1 register"
 
-	// Initialize SDRAM control Interface
-	ACCESS(FMC_SDCR1) &= ((unsigned int)~(0x3 << 10 | 0x1 << 12 | 0x3 << 13));
-	ACCESS(FMC_SDCR1) |= (0xc00 | 0x2000);
+	// Initialize SDRAM control interface.  After the next two lines of code, the values for the SDCR1 register:
+	// See pg 1671 for the details of the FMC_SDCR register.  We set it up as follows:
+	// Bits   1-0: Number of column address bits = 00 (8 bits)
+	// Bits   3-2: Number of row address bits = 00 (11 bits)
+	// Bits   5-4: Memory data bus width = 01 (16 bits)
+	// Bit      6: Number of internal banks = 1
+	// Bits   7-8: CAS Latency (See below for definition) = 01 (1 cycle)
+	// Bit       9: Write protection = 1 (Write accesses ignored)
+	// Bits 11-10: SDRAM clock configuration = 11 (SDCLK period = 3 x HCLK periods)
+	// Bit     12: Burst read = 0 (single read requests are not managed as bursts)
+	// Bit  13-14: Read pipe = 01 (One HCLK clock cycle delay)
+	// Wikipedia tells me "Column Access Strobe (CAS) latency, or CL, is the delay time between the moment a memory controller tells
+	// the memory module to access a particular memory column on a RAM module, and the moment the data from the given array location
+	// is available on the module's output pins".
+	ACCESS(FMC_SDCR1) &= ~((3 << 10) | (1 << 12) | (0x3 << 13)); // Clear bits 10-14
+	ACCESS(FMC_SDCR1) |= ((3 << 10) | (1 << 13));
 
-	ACCESS(FMC_SDCR2) &= ~(0x7FFF);
-	ACCESS(FMC_SDCR2) |= (0x4 | 0x10 | 0x40 | 0x180);
 
+	// Initialize SDRAM control interface.  After the next two lines of code, the values for the SDCR2 register:
+	// See pg 1671 for the details of the FMC_SDCR register.  We set it up as follows:
+	// Bits   1-0: Number of column address bits = 00 (8 bits)
+	// Bits   3-2: Number of row address bits = 01 (12 bits)
+	// Bits   5-4: Memory data bus width = 01 (16 bits)
+	// Bit      6: Number of internal banks = 1
+	// Bits   7-8: CAS Latency (See below for definition) = 11 (3 cycle)
+	// Bit       9: Write protection = 0 (Write accesses allowed)
+	// Bits 11-10: SDRAM clock configuration = 00 (SDCLK clock disabled)
+	// Bit     12: Burst read = 0 (single read requests are not managed as bursts)
+	// Bit  13-14: Read pipe = 00 (No HCLK clock cycle delay)
+	ACCESS(FMC_SDCR2) &= ~(0x7FFF); // Clear bits 0-14
+	ACCESS(FMC_SDCR2) |= ((1 << 2) | (1 << 4) | (1 << 6) | (3 << 7));
 
-	// Initialize SDRAM timing Interface
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Step 2. "Program the memory device timing into the FMC_SDTRx register. The TRP and TRC timings must be programmed in
+	// the FMC_SDTR1 register".  Note TRP = "Row precharge delay" (bits 20-23) and TRC = "Row cycle delay" (bits 12-15).
+
+	// SDRAM Timing register 1 (See pg 1672).  After the next two lines of code, the values for the SDTR1 register:
+	// Bits   3-0: Load Mode Register to Active = 1111 (16 cycles)
+	// Bits   7-4: Exit Self-refresh delay = 1111 (16 cycles)
+	// Bits  8-11: Self refresh time = 1111 (16 cycles)
+	// Bits 12-15: Row cycle delay = 0110 (7 cycles)
+	// Bits 16-19: Recovery delay = 1111 (16 cycles)
+	// Bits 20-23: Row precharge delay = 0001 (2 cycles)
+	// Bits 24-27: Row to column delay = 1111 (16 cycles)
 	ACCESS(FMC_SDTR1) &= ((unsigned int)~(0xFU << 12 | 0xFU << 20));  // Clear out TRC and TRP
 	ACCESS(FMC_SDTR1) |= (unsigned int)((((7)-1U) << 12U) | (((2)-1U) << 20U));
 
 
-	// Set SDRAM Timing register 2 to the following:
-	// Load Module Register Delay: 2 cycles
-	// Exit Self-Refresh Delay: 7 cycles
-	// Self Refresh Time: 4 cycles
-	// Row Cycle Delay: 1 cycle
-	// Recovery Delay: 2 cycles
-	// Row Precharge Delay: 1 cycle
-	// Row to Column Delay: 2 cycles
+	// SDRAM Timing register 2 (See pg 1672).  After the next two lines of code, the values for the SDTR2 register:
+	// Bits   3-0: Load Mode Register to Active = 0001 (2 cycles)
+	// Bits   7-4: Exit Self-refresh delay = 0110 (5 cycles)
+	// Bits  8-11: Self refresh time = 0011 (2 cycles)
+	// Bits 12-15: Row cycle delay = 0000 (1 cycle)
+	// Bits 16-19: Recovery delay = 0001 (2 cycles)
+	// Bits 20-23: Row precharge delay = 0000 (1 cycle)
+	// Bits 24-27: Row to column delay = 0001 (2 cycles)
 	ACCESS(FMC_SDTR2) &= ~(0xFFFFFFF);  // Clear all of the settings
 	ACCESS(FMC_SDTR2) |= (unsigned int)((((2)-1U) | (((7)-1U) << 4U) | (((4)-1U) << 8U) | (((2)-1U) <<16U) | (((2)-1U) << 24U)));
 
-	// Step 3:  Configure a clock configuration enable command
-	ACCESS(FMC_SDCMR) = (1 | (0x1U << (3U)));
+	// Step 3: "Set MODE bits to '001' and configure the Target Bank bits (CTB1 and/or CTB2) in the FMC_SDCMR register to start
+	// delivering the clock to the memory (SDCKE is driven high)"
+	// Bits  2-0: Command mode = 001 (Clock Configuration Enable)
+	// Bit     3: Command Target Bank 2 = 1 (Command issued to SDRAM Bank 2)
+	// Bit     4: Command Target Bank 1 = 0 (Command not issued to SDRAM Bank 1)
+	// Bits  5-8: Number of Auto-refresh = 0000 (1 Auto-refresh cycle)
+	// Bits 9-21: Mode Register definition = All zeros (no content)
+	ACCESS(FMC_SDCMR) = (1 | (1 << 3));
 	while((ACCESS(FMC_SDSR) & (1 << 5))); // See pg 1676 - Block until the SDRAM controller is ready to accept a new request
 
-	// Wait 100ms
+	// Step 4: "Wait during the prescribed delay period. Typical delay is around 100us (refer to the
+	// SDRAM datasheet for the required delay after power-up)"
+	// Totally unscientific here by just spinning 100,000 counts
 	volatile unsigned int counter = 100000;
 	while(counter) { --counter; }
 
-	// Step 5: Configure a PALL (precharge all) command
+	// Step 5: "Set MODE bits to '010' and configure the Target Bank bits (CTB1 and/or CTB2) in the FMC_SDCMR register to
+	// issue a 'Precharge All' command"
+	// Bits  2-0: Command mode = 010 (PALL (“All Bank Precharge”) command)
+	// Bit     3: Command Target Bank 2 = 1 (Command issued to SDRAM Bank 2)
+	// Bit     4: Command Target Bank 1 = 0 (Command not issued to SDRAM Bank 1)
+	// Bits  5-8: Number of Auto-refresh = 0000 (1 Auto-refresh cycle)
+	// Bits 9-21: Mode Register definition = All zeros (no content)
 	ACCESS(FMC_SDCMR) = ((1 << 1) | (1 << 3));
 	while((ACCESS(FMC_SDSR) & (1 << 5))); // See pg 1676 - Block until the SDRAM controller is ready to accept a new request
  
-	// Step 6 : Configure a Auto-Refresh comman
+	// Step 6: "Set MODE bits to '011', and configure the Target Bank bits (CTB1 and/or CTB2) as well as the number of
+	// consecutive Auto-refresh commands (NRFS) in the FMC_SDCMR register. Refer to the SDRAM datasheet for the number
+	// of Auto-refresh commands that should be issued. Typical number is 8."
+	// Bits  2-0: Command mode = 011 (Auto-refresh command)
+	// Bit     3: Command Target Bank 2 = 1 (Command issued to SDRAM Bank 2)
+	// Bit     4: Command Target Bank 1 = 0 (Command not issued to SDRAM Bank 1)
+	// Bits  5-8: Number of Auto-refresh = 0011 (4 Auto-refresh cycles)
+	// Bits 9-21: Mode Register definition = All zeros (no content)
 	ACCESS(FMC_SDCMR) = (3 | (1 << 3) | (3 << 5));
 	while((ACCESS(FMC_SDSR) & (1 << 5))); // See pg 1676 - Block until the SDRAM controller is ready to accept a new request
 
-	// Step 7: Program the external memory mode register 
-	ACCESS(FMC_SDCMR) = ((1 << 2) | (1 << 3) | ((1 | 0x30 | 0x200) << 9));
+	// Step 7: Configure the MRD field according to your SDRAM device, set the MODE bits to '100', and configure the Target
+	// Bank bits (CTB1 and/or CTB2) in the FMC_SDCMR register to issue a "Load Mode Register" command in order to program
+	// the SDRAM. In particular:
+	// a) The CAS latency must be selected following configured value in FMC_SDCR1/2 registers
+	// b) The Burst Length (BL) of 1 must be selected by configuring the M[2:0] bits to 000 in the mode register (refer
+	// to the SDRAM datasheet). If the Mode Register is not the same for both SDRAM banks, this step has to be repeated twice,
+	// once for each bank, and the Target Bank bits set accordingly."
+	// Bits  2-0: Command mode = 100 (Load Mode Register)
+	// Bit     3: Command Target Bank 2 = 1 (Command issued to SDRAM Bank 2)
+	// Bit     4: Command Target Bank 1 = 0 (Command not issued to SDRAM Bank 1)
+	// Bits  5-8: Number of Auto-refresh = 0000 (1 Auto-refresh cycle)
+	// Bits 9-21: Mode Register definition = 0x231 = 0010.0011.0001
+	ACCESS(FMC_SDCMR) = ((1 << 2) | (1 << 3) | (0x231 << 9));
 	while((ACCESS(FMC_SDSR) & (1 << 5))); // See pg 1676 - Block until the SDRAM controller is ready to accept a new request
 
-	/* Step 8: Set the refresh rate counter */
-	/* (15.62 us x Freq) - 20 */
-	/* Set the device refresh counter */
-	//myHAL_SDRAM_ProgramRefreshRate(hsdram, REFRESH_COUNT);
-	ACCESS(FMC_SDRTR) |= (REFRESH_COUNT << 1U);
+	// Step 8: "Program the refresh rate in the FMC_SDRTR register The refresh rate corresponds to the delay between refresh
+	// cycles. Its value must be adapted to SDRAM devices."
+	// Comment from the STM example code: (15.62 us x Freq) - 20
+	// This is also on pg 1676:
+	//     COUNT = (SDRAM refresh rate x SDRAM clock frequency) - 20
+	//     SDRAM refresh rate = SDRAM refresh period / Number of rows
+	// See page 1675- the SDRAM Refresh Timer register
+	// Bit     0: Clear Refresh error flag = 0
+	// Bits 13-1: Refresh Timer Count = 01010110101 (693 decimal)
+	// Bit    14: RES Interrupt Enable = 0 (Interrupt is disabled)
+	// Okay, so if SDRAM Clock Frequency = 90 we have:
+	// 693 = (x * 90) - 20 => 713 = 90x => x = 7.92
+	ACCESS(FMC_SDRTR) |= (0x056A << 1U);
 }
 
 void WriteReadTest()
