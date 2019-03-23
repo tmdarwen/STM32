@@ -11,20 +11,14 @@
 //	is in reference to ST's "RM0383 Reference manual" which covers the
 //	technical details of the STM32F411xC/E Advanced Arm-based 32-bit MCUs
 
-#include <stdint.h>
 #include "RegisterAddresses.h"
 #include "SineSignal.h"
+#include "Types.h"
 
 #define ACCESS_8_BITS(address)  *((volatile uint8_t*)(address))
 #define ACCESS_16_BITS(address) *((volatile uint16_t*)(address))
 #define ACCESS(address)         *((volatile uint32_t*)(address))
 
-#define PLL_N		400
-#define PLL_P		4
-#define PLL_M		16
-#define PLL_Q		7
-
-void ConfigureSystemClock();
 void InitializeCommunicationToDAC();
 void WaitForTransmissionToFinish(uint32_t transmissionBits);
 void SendMessageToDAC(uint8_t dacAddress, uint8_t setting);
@@ -35,8 +29,6 @@ void StartAudioPlayback();
 int main(void)
 {
 	uint32_t sampleCounter = 0;
-
-	ConfigureSystemClock();
 
 	InitializeCommunicationToDAC();
 
@@ -61,56 +53,6 @@ int main(void)
 		if(sampleCounter == 100) sampleCounter = 0;
 	}
 }
-
-void ConfigureSystemClock()
-{
-	// Activate the HSI (high speed internal) oscillator (pg 102)
-	ACCESS(RCC_CR) |= 0x000000001;
-
-	// Reset the RCC clock configuration register.
-	// Reset value for this register is 0x00000000 (pg 105)
-	ACCESS(RCC_CFGR) = 0x00000000;
-
-	// Clear bits 16, 19 and 24 of the clock control register (pg 101)
-	// This sets the following:
-	//   HSE = Off (Bit 16)
-	//   CSS = Off (Bit 19)
-	//   PLL = Off (Bit 24)
-	ACCESS(RCC_CR) &= ~((1 << 24) | (1 << 19) | (1 << 16));
-
-	// Reset the PLL configuration register. Reset value is 0x24003010 (pg 103)
-	ACCESS(RCC_PLLCFGR) = 0x24003010;
-
-	// Reset the clock interrupt register (pg 108)
-	ACCESS(RCC_CIR) = 0x00000000;
-
-	// Enable power to the APB1 (advanced peripheral bus) clock (pg 118)
-	ACCESS(RCC_APB1ENR) |= (1 << 28);
-
-	// Set the voltage scaling regularotr to "Scale 1 mode <= 100 MHz" (pg 85)
-	ACCESS(PWR_CR) |= ((1 << 15) | (1 << 14));
-
-	// Set the "APB low-speed clock division factor" to the "AHB clock divided by 2" (pg 106)
-	ACCESS(RCC_CFGR) &= ~(0x7 << 10);  // First clear the bits
-	ACCESS(RCC_CFGR) |= (1 << 12);     // Then set the value
-
-	// Configure the PLL factors (pg 103)
-	ACCESS(RCC_PLLCFGR) |= PLL_M | (PLL_N << 6) | (((PLL_P >> 1) -1) << 16) | (PLL_Q << 24);
-
-	// Enable the PLL (See pg 101)
-	ACCESS(RCC_CR) |= (1 << 24);
-
-	// Wait until the PLL is ready
-	while((ACCESS(RCC_CR) & (1 << 25)) == 0);
-
-	// Use the PLL as the system clock (pg 107)
-	ACCESS(RCC_CFGR) &= ~((1 << 1) | (1 << 0));  // Clear the bits
-	ACCESS(RCC_CFGR) |= (1 << 1);                // Then set the value
-
-	// Wait until the main PLL is used as system clock source (pg 107)
-	while((ACCESS(RCC_CFGR) & 0xC) != (1 << 3));
-}
-
 
 void InitializeCommunicationToDAC()
 {
@@ -299,7 +241,6 @@ void WaitForTransmissionToFinish(uint32_t transmissionBits)
 	while(((ACCESS(I2C1_SR1) | (ACCESS(I2C1_SR2) << 16)) & transmissionBits) != transmissionBits);
 }
 
-
 void SendMessageToDAC(uint8_t dacAddress, uint8_t setting)
 {
 	// Make sure the I2C bus is not busy. Bit 1 of the SR2 register
@@ -416,7 +357,6 @@ uint8_t ReadMessageFromDAC(uint8_t mapbyte)
 
 	return receivedByte;
 }
-
 
 void InitializeDAC()
 {

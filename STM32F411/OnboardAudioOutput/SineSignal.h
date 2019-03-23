@@ -24,6 +24,8 @@
  * THE SOFTWARE.
  */
 
+#include "Types.h"
+
 // A full cycle of a sine wave consisting of 16 bit PCM audio data
 
 uint16_t SINE_SIGNAL[100] = {
