@@ -12,11 +12,12 @@
 //	technical details of the STM32F411xC/E Advanced Arm-based 32-bit MCUs
 
 #include "RegisterAddresses.h"
-#include "SineSignal.h"
+#include "AudioSample.h"
 #include "Types.h"
 
 #define ACCESS_8_BITS(address)  *((volatile uint8_t*)(address))
 #define ACCESS_16_BITS(address) *((volatile uint16_t*)(address))
+//#define ACCESS_16_BITS(address) *((volatile short*)(address))
 #define ACCESS(address)         *((volatile uint32_t*)(address))
 
 void InitializeCommunicationToDAC();
@@ -38,19 +39,16 @@ int main(void)
 
 	while(1)
 	{
-		// SINE_TABLE contains the samples of a single cycle of a sine wave.  We want
-		// to play the same audio to both audio channels (left and right).
-
 		// Left channel
-		while((ACCESS_16_BITS(SPI3_I2S3_SR) & (1 << 1)) != (1 << 1));	// Wait until transfer buffer is empty
-		ACCESS_16_BITS(SPI3_I2S3_DR) = SINE_SIGNAL[sampleCounter];		// Write audio sample to the data register
+		while((ACCESS_16_BITS(SPI3_I2S3_SR) & (1 << 1)) != (1 << 1));  // Wait until transfer buffer is empty
+		ACCESS_16_BITS(SPI3_I2S3_DR) = audioSample[sampleCounter];     // Write audio sample to the data register
 
 		// Right channel
 		while((ACCESS_16_BITS(SPI3_I2S3_SR) & (1 << 1)) != (1 << 1));
-		ACCESS_16_BITS(SPI3_I2S3_DR) = SINE_SIGNAL[sampleCounter];
+		ACCESS_16_BITS(SPI3_I2S3_DR) = audioSample[sampleCounter];
 
 		++sampleCounter;
-		if(sampleCounter == 100) sampleCounter = 0;
+		if(sampleCounter == audioSampleLength) sampleCounter = 0;
 	}
 }
 

@@ -5,7 +5,7 @@ The [STM32F411 development board](http://www.st.com/en/microcontrollers/stm32f41
 
 This code is based on Andreas Finkelmeyer's original code posted at [http://www.mind-dump.net/configuring-the-stm32f4-discovery-for-audio](http://www.mind-dump.net/configuring-the-stm32f4-discovery-for-audio) though I've heavily modified it to directly interact with the registers of the STM32F411 instead of using the Standard Peripheral Library.
 
-The I2C/I2S data sent from the STM32F411 can also be used on an external DAC.  I've successfully done this using a [Digilent PMOD I2S](https://reference.digilentinc.com/reference/pmod/pmodi2s/start). The STM32F411 pins to use to do this are as follows:
+The I2C/I2S data sent from the STM32F411 can also be used on an external DAC.  I've successfully done this using my [CS4334 Audio DAC breakout board](https://github.com/tmdarwen/Misc/tree/main/CS4334BreakoutBoard) and a [Digilent PMOD I2S](https://reference.digilentinc.com/reference/pmod/pmodi2s/start). The STM32F411 pins to use to do this are as follows:
 * Pin A4 = LRCLK
 * Pin C7 = MCLK
 * Pin C10 = SCLK
