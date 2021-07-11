@@ -1,7 +1,7 @@
 STM32 ArmCortexM4Analysis
 =========================
 
-This example was written for the [STM32F411 development board](http://www.st.com/en/microcontrollers/stm32f411.html?querycriteria=productId=LN1877).  It's the program used in my blog post [In Depth Analysis of an ARM Cortex-M4 Program](http://www.tmdarwen/blog/in-depth-analysis-of-an-arm-cortex-m-program).
+This example was written for the [STM32F411 development board](http://www.st.com/en/microcontrollers/stm32f411.html?querycriteria=productId=LN1877).  It's the program used in my blog post [In Depth Analysis of an ARM Cortex-M4 Program](https://www.tmdarwen.com/latest/in-depth-analysis-of-an-arm-cortex-m-program).
 
  
 
