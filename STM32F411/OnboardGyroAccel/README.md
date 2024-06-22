@@ -9,9 +9,3 @@ The [STM32F411 development board](http://www.st.com/en/microcontrollers/stm32f41
 
 1.   An [STMF32F411](http://www.st.com/en/microcontrollers/stm32f411.html?querycriteria=productId=LN1877) development board.  Currently they can be ordered from the usual sites for around $15 USD plus shipping.
 1.   A USB to TTL Serial Cable like [this one from AdaFruit](https://www.adafruit.com/product/954).
-
- 
-
-**Video Demo**
-
-[![STM32 Gyroscope and Accelerometer Demonstration](https://img.youtube.com/vi/488qheY73ic/0.jpg)](https://www.youtube.com/watch?v=488qheY73ic)
